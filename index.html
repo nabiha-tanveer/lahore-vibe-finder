@@ -12,6 +12,7 @@
   <header class="navbar">
     <h1 class="logo">Vibe<span>Finder</span></h1>
     <div class="navbar-right">
+      <button id="bookingsBtn" class="fav-count-btn">📅 <span id="bookingCount">0</span></button>
       <button id="favCountBtn" class="fav-count-btn">❤️ <span id="favCount">0</span></button>
       <button id="themeToggle" class="theme-btn">🌙</button>
     </div>
@@ -19,7 +20,7 @@
 
   <!-- Hero Section -->
   <section class="hero">
-    <h2>Find Your Perfect Spot in Lahore</h2>
+        <h2><span id="typewriterHeading"></span><span class="cursor">|</span></h2>
     <p>Select a vibe, search, and discover cafés & study spots that match your mood.</p>
 
     <div class="search-bar">
@@ -34,17 +35,19 @@
       <button class="mood-btn" data-mood="budget">Budget</button>
     </div>
 
-    <div class="sort-row">
-      <label for="sortSelect">Sort by:</label>
-      <select id="sortSelect">
-        <option value="default">Default</option>
-        <option value="name">Name (A-Z)</option>
-        <option value="rating">Rating (High to Low)</option>
-        <option value="popular">Popular (Most Votes)</option>
-      </select>
+      <div class="controls-row">
+      <div class="sort-row">
+        <label for="sortSelect">Sort by:</label>
+        <select id="sortSelect">
+          <option value="default">Default</option>
+          <option value="name">Name (A-Z)</option>
+          <option value="rating">Rating (High to Low)</option>
+          <option value="popular">Popular (Most Votes)</option>
+        </select>
+      </div>
+      <div class="controls-divider"></div>
+      <button id="surpriseBtn" class="surprise-btn">🎲 Surprise Me</button>
     </div>
-
-    <button id="surpriseBtn" class="surprise-btn">🎲 Surprise Me</button>
   </section>
 
   <!-- Spots Grid -->
@@ -66,6 +69,15 @@
       <button class="modal-close" id="favModalClose">&times;</button>
       <h2 style="margin-bottom:16px;">Your Favorites</h2>
       <div id="favModalContent"></div>
+    </div>
+  </div>
+
+  <!-- Bookings Modal -->
+  <div class="modal-overlay" id="bookingsModalOverlay">
+    <div class="modal">
+      <button class="modal-close" id="bookingsModalClose">&times;</button>
+      <h2 style="margin-bottom:16px;">Your Bookings</h2>
+      <div id="bookingsModalContent"></div>
     </div>
   </div>
 

@@ -1,3 +1,4 @@
+// ---------- DATA ----------
 const spots = [
   { id: 1, name: "The Coffee Bean Hideout", mood: "chill", price: "Rs. 400", desc: "Cozy corner with soft lighting, perfect for unwinding.", img: "https://images.unsplash.com/photo-1739723745132-97df9db49db2?q=80&w=1074&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", details: "Open till midnight. Known for cold brews and outdoor seating." },
   { id: 2, name: "Study Nook DHA", mood: "study", price: "Rs. 350", desc: "Quiet, fast wifi, plenty of plug points.", img: "https://plus.unsplash.com/premium_photo-1661938292024-3869b974f578?q=80&w=2060&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", details: "Ideal for group study. Whiteboards available on request." },
@@ -35,6 +36,7 @@ let searchTerm = "";
 let sortBy = "default";
 let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
 let ratingsData = JSON.parse(localStorage.getItem("ratingsData")) || {};
+let bookings = JSON.parse(localStorage.getItem("bookings")) || [];
 
 // ---------- DOM ----------
 const spotsGrid = document.getElementById("spotsGrid");
@@ -55,8 +57,13 @@ const favModalOverlay = document.getElementById("favModalOverlay");
 const favModalContent = document.getElementById("favModalContent");
 const favModalClose = document.getElementById("favModalClose");
 const toast = document.getElementById("toast");
+const bookingsBtn = document.getElementById("bookingsBtn");
+const bookingCount = document.getElementById("bookingCount");
+const bookingsModalOverlay = document.getElementById("bookingsModalOverlay");
+const bookingsModalContent = document.getElementById("bookingsModalContent");
+const bookingsModalClose = document.getElementById("bookingsModalClose");
 
-// ---------- HELPER: attach fallback image handler (no inline onerror, avoids quote issues) ----------
+// ---------- HELPER: image fallback ----------
 function attachImgFallback(container) {
   container.querySelectorAll("img").forEach(img => {
     img.addEventListener("error", function handler() {
@@ -200,9 +207,55 @@ favModalOverlay.addEventListener("click", (e) => {
   if (e.target === favModalOverlay) favModalOverlay.classList.remove("active");
 });
 
+// ---------- BOOKINGS ----------
+function updateBookingCount() {
+  bookingCount.textContent = bookings.length;
+}
+
+function addBooking(spotName, visitorName, date, time) {
+  bookings.push({ id: Date.now(), spotName, visitorName, date, time });
+  localStorage.setItem("bookings", JSON.stringify(bookings));
+  updateBookingCount();
+  showToast(`Visit booked at "${spotName}" ✅`);
+}
+
+function cancelBooking(id) {
+  bookings = bookings.filter(b => b.id !== id);
+  localStorage.setItem("bookings", JSON.stringify(bookings));
+  updateBookingCount();
+  renderBookingsModal();
+  showToast("Booking cancelled");
+}
+
+function renderBookingsModal() {
+  bookingsModalContent.innerHTML = bookings.length
+    ? bookings.map(b => `
+        <div class="booking-mini-card">
+          <strong>${b.spotName}</strong>
+          <span>${b.visitorName} • ${b.date} at ${b.time}</span><br>
+          <button class="cancel-booking-btn" data-id="${b.id}">Cancel booking</button>
+        </div>
+      `).join("")
+    : "<p>No bookings yet.</p>";
+
+  bookingsModalContent.querySelectorAll(".cancel-booking-btn").forEach(btn => {
+    btn.addEventListener("click", () => cancelBooking(Number(btn.dataset.id)));
+  });
+}
+
+bookingsBtn.addEventListener("click", () => {
+  renderBookingsModal();
+  bookingsModalOverlay.classList.add("active");
+});
+bookingsModalClose.addEventListener("click", () => bookingsModalOverlay.classList.remove("active"));
+bookingsModalOverlay.addEventListener("click", (e) => {
+  if (e.target === bookingsModalOverlay) bookingsModalOverlay.classList.remove("active");
+});
+
 // ---------- MODAL ----------
 function openModal(spot) {
   const r = getRating(spot.id);
+  const todayStr = new Date().toISOString().split("T")[0];
   modalContent.innerHTML = `
     <img src="${spot.img}" style="width:100%;border-radius:10px;margin-bottom:15px;">
     <h2>${spot.name}</h2>
@@ -214,6 +267,22 @@ function openModal(spot) {
       ${renderStars(r.rating, true, spot.id)}
       <span class="rating-text">${r.rating.toFixed(1)} (${r.votes} votes)</span>
     </div>
+
+    <div class="booking-form">
+      <strong>📅 Book a Visit</strong>
+      <form id="bookingForm">
+        <label for="visitorName">Your Name</label>
+        <input type="text" id="visitorName" placeholder="e.g. Nabiha" required>
+
+        <label for="visitDate">Date</label>
+        <input type="date" id="visitDate" min="${todayStr}" required>
+
+        <label for="visitTime">Time</label>
+        <input type="time" id="visitTime" required>
+
+        <button type="submit">Confirm Booking</button>
+      </form>
+    </div>
   `;
   modalOverlay.classList.add("active");
   attachImgFallback(modalContent);
@@ -223,6 +292,22 @@ function openModal(spot) {
       rateSpot(Number(star.dataset.id), Number(star.dataset.star));
       openModal(spot);
     });
+  });
+
+  const bookingForm = document.getElementById("bookingForm");
+  bookingForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const visitorName = document.getElementById("visitorName").value.trim();
+    const visitDate = document.getElementById("visitDate").value;
+    const visitTime = document.getElementById("visitTime").value;
+
+    if (!visitorName || !visitDate || !visitTime) {
+      showToast("Please fill all booking fields");
+      return;
+    }
+
+    addBooking(spot.name, visitorName, visitDate, visitTime);
+    modalOverlay.classList.remove("active");
   });
 }
 modalClose.addEventListener("click", () => modalOverlay.classList.remove("active"));
@@ -296,3 +381,17 @@ newsletterForm.addEventListener("submit", (e) => {
 // ---------- INIT ----------
 renderSpots();
 renderTestimonial();
+updateBookingCount();
+// ---------- TYPEWRITER EFFECT ----------
+const typewriterEl = document.getElementById("typewriterHeading");
+const typewriterText = "Find Your Perfect Spot in Lahore";
+let twIndex = 0;
+
+function typeWriter() {
+  if (twIndex < typewriterText.length) {
+    typewriterEl.textContent += typewriterText.charAt(twIndex);
+    twIndex++;
+    setTimeout(typeWriter, 60);
+  }
+}
+typeWriter();
