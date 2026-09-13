@@ -360,3 +360,23 @@ footer {
   font-family: 'Poppins', sans-serif;
   font-weight: 500;
 }
+.price-tag {
+  display: inline-block;
+  background: #eafaf0;
+  color: #1e8449;
+  padding: 4px 12px;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-left: 6px;
+}
+.price-tag {
+  display: inline-block;
+  background: #eafaf0;
+  color: #1e8449;
+  padding: 4px 12px;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-left: 6px;
+}
