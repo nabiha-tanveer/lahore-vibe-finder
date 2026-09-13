@@ -23,21 +23,23 @@ const spots = [
 const testimonials = [
   { name: "Ayesha", text: "Found my go-to study spot in seconds. Love the filter!" },
   { name: "Hamza", text: "The vibe-based search actually works, super accurate." },
-  { name: "Sara", text: "Clean design and so easy to use on mobile." },
- { name: "amna", text: "Nice." }
+  { name: "Sara", text: "Clean design and so easy to use on mobile." }
 ];
 
-const PLACEHOLDER_IMG = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="180"><rect width="300" height="180" fill="%23d97b4f"/><text x="50%25" y="50%25" fill="%23fff" font-size="18" text-anchor="middle" dominant-baseline="middle</text></svg>';
+const PLACEHOLDER_IMG = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="180"><rect width="300" height="180" fill="%23d97b4f"/><text x="50%25" y="50%25" fill="%23fff" font-size="18" text-anchor="middle" dominant-baseline="middle">Vibe Spot</text></svg>';
 
 // ---------- STATE ----------
 let currentMood = "all";
 let searchTerm = "";
+let sortBy = "default";
 let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+let ratingsData = JSON.parse(localStorage.getItem("ratingsData")) || {};
 
 // ---------- DOM ----------
 const spotsGrid = document.getElementById("spotsGrid");
 const searchInput = document.getElementById("searchInput");
 const moodFilters = document.getElementById("moodFilters");
+const sortSelect = document.getElementById("sortSelect");
 const modalOverlay = document.getElementById("modalOverlay");
 const modalContent = document.getElementById("modalContent");
 const modalClose = document.getElementById("modalClose");
@@ -45,19 +47,63 @@ const themeToggle = document.getElementById("themeToggle");
 const testimonialSlider = document.getElementById("testimonialSlider");
 const newsletterForm = document.getElementById("newsletterForm");
 const formMsg = document.getElementById("formMsg");
+const surpriseBtn = document.getElementById("surpriseBtn");
+const favCountBtn = document.getElementById("favCountBtn");
+const favCount = document.getElementById("favCount");
+const favModalOverlay = document.getElementById("favModalOverlay");
+const favModalContent = document.getElementById("favModalContent");
+const favModalClose = document.getElementById("favModalClose");
+
+// ---------- RATINGS ----------
+function getRating(id) {
+  if (!ratingsData[id]) {
+    ratingsData[id] = { rating: 4.0, votes: 1 };
+  }
+  return ratingsData[id];
+}
+
+function rateSpot(id, stars) {
+  const current = getRating(id);
+  const newVotes = current.votes + 1;
+  const newRating = ((current.rating * current.votes) + stars) / newVotes;
+  ratingsData[id] = { rating: newRating, votes: newVotes };
+  localStorage.setItem("ratingsData", JSON.stringify(ratingsData));
+  renderSpots();
+}
+
+function renderStars(rating, interactive = false, spotId = null) {
+  const rounded = Math.round(rating);
+  let html = `<div class="stars ${interactive ? "rating-stars-interactive" : ""}">`;
+  for (let i = 1; i <= 5; i++) {
+    html += interactive
+      ? `<span data-id="${spotId}" data-star="${i}">${i <= rounded ? "★" : "☆"}</span>`
+      : (i <= rounded ? "★" : "☆");
+  }
+  html += `</div>`;
+  return html;
+}
 
 // ---------- RENDER SPOTS ----------
 function renderSpots() {
-  const filtered = spots.filter(spot => {
+  let filtered = spots.filter(spot => {
     const matchesMood = currentMood === "all" || spot.mood === currentMood;
     const matchesSearch = spot.name.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesMood && matchesSearch;
   });
 
+  if (sortBy === "name") {
+    filtered = filtered.slice().sort((a, b) => a.name.localeCompare(b.name));
+  } else if (sortBy === "rating") {
+    filtered = filtered.slice().sort((a, b) => getRating(b.id).rating - getRating(a.id).rating);
+  } else if (sortBy === "popular") {
+    filtered = filtered.slice().sort((a, b) => getRating(b.id).votes - getRating(a.id).votes);
+  }
+
   spotsGrid.innerHTML = filtered.length ? "" : "<p>No spots found. Try a different filter.</p>";
 
   filtered.forEach(spot => {
     const isFav = favorites.includes(spot.id);
+    const r = getRating(spot.id);
     const card = document.createElement("div");
     card.className = "spot-card";
     card.innerHTML = `
@@ -67,6 +113,7 @@ function renderSpots() {
         <h3>${spot.name}</h3>
         <p>${spot.desc}</p>
         <span class="spot-tag">${spot.mood}</span>
+        <div style="margin-top:8px;">${renderStars(r.rating)} <span class="rating-text">(${r.votes})</span></div>
       </div>
     `;
     card.addEventListener("click", (e) => {
@@ -81,6 +128,8 @@ function renderSpots() {
       toggleFavorite(Number(btn.dataset.id));
     });
   });
+
+  updateFavCount();
 }
 
 // ---------- FAVORITES ----------
@@ -94,15 +143,56 @@ function toggleFavorite(id) {
   renderSpots();
 }
 
+function updateFavCount() {
+  favCount.textContent = favorites.length;
+}
+
+function renderFavModal() {
+  const favSpots = spots.filter(s => favorites.includes(s.id));
+  favModalContent.innerHTML = favSpots.length
+    ? favSpots.map(s => `
+        <div class="fav-mini-card">
+          <img src="${s.img}" onerror="this.onerror=null;this.src='${PLACEHOLDER_IMG}'">
+          <div>
+            <strong>${s.name}</strong><br>
+            <span class="spot-tag">${s.mood}</span>
+          </div>
+        </div>
+      `).join("")
+    : "<p>No favorites yet. Tap the heart on any spot!</p>";
+}
+
+favCountBtn.addEventListener("click", () => {
+  renderFavModal();
+  favModalOverlay.classList.add("active");
+});
+favModalClose.addEventListener("click", () => favModalOverlay.classList.remove("active"));
+favModalOverlay.addEventListener("click", (e) => {
+  if (e.target === favModalOverlay) favModalOverlay.classList.remove("active");
+});
+
 // ---------- MODAL ----------
 function openModal(spot) {
+  const r = getRating(spot.id);
   modalContent.innerHTML = `
     <img src="${spot.img}" style="width:100%;border-radius:10px;margin-bottom:15px;" onerror="this.onerror=null;this.src='${PLACEHOLDER_IMG}'">
     <h2>${spot.name}</h2>
     <span class="spot-tag">${spot.mood}</span>
     <p style="margin-top:12px;">${spot.details}</p>
+    <div style="margin-top:14px;">
+      <strong>Rate this spot:</strong><br>
+      ${renderStars(r.rating, true, spot.id)}
+      <span class="rating-text">${r.rating.toFixed(1)} (${r.votes} votes)</span>
+    </div>
   `;
   modalOverlay.classList.add("active");
+
+  modalContent.querySelectorAll(".rating-stars-interactive span").forEach(star => {
+    star.addEventListener("click", () => {
+      rateSpot(Number(star.dataset.id), Number(star.dataset.star));
+      openModal(spot);
+    });
+  });
 }
 modalClose.addEventListener("click", () => modalOverlay.classList.remove("active"));
 modalOverlay.addEventListener("click", (e) => {
@@ -118,10 +208,22 @@ moodFilters.addEventListener("click", (e) => {
   renderSpots();
 });
 
+// ---------- SORT ----------
+sortSelect.addEventListener("change", (e) => {
+  sortBy = e.target.value;
+  renderSpots();
+});
+
 // ---------- SEARCH ----------
 searchInput.addEventListener("input", (e) => {
   searchTerm = e.target.value;
   renderSpots();
+});
+
+// ---------- SURPRISE ME ----------
+surpriseBtn.addEventListener("click", () => {
+  const random = spots[Math.floor(Math.random() * spots.length)];
+  openModal(random);
 });
 
 // ---------- THEME TOGGLE ----------

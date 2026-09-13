@@ -276,3 +276,87 @@ footer {
   opacity: 0.6;
   font-size: 0.85rem;
 }
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.fav-count-btn {
+  background: var(--card-bg);
+  border: none;
+  border-radius: 30px;
+  padding: 10px 18px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  transition: transform 0.2s;
+}
+.fav-count-btn:hover { transform: scale(1.05); }
+
+.stars {
+  color: #f5a623;
+  font-size: 1.1rem;
+  letter-spacing: 2px;
+}
+.rating-stars-interactive span {
+  cursor: pointer;
+  transition: transform 0.15s;
+  display: inline-block;
+}
+.rating-stars-interactive span:hover {
+  transform: scale(1.25);
+}
+.rating-text {
+  font-size: 0.85rem;
+  opacity: 0.65;
+  margin-left: 6px;
+}
+
+.surprise-btn {
+  margin-top: 18px;
+  padding: 12px 26px;
+  border-radius: 30px;
+  border: 2px dashed var(--accent);
+  background: transparent;
+  color: var(--accent-dark);
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.25s;
+}
+.surprise-btn:hover {
+  background: var(--accent);
+  color: #fff;
+  transform: scale(1.05);
+}
+
+.fav-mini-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+}
+.fav-mini-card img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+.sort-row {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 0.9rem;
+}
+.sort-row select {
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: none;
+  background: var(--card-bg);
+  box-shadow: 0 3px 10px rgba(0,0,0,0.06);
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+}
