@@ -3,14 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lahore Vibe Finder</title>
+  <title>Lahore Vibe Finder | Home</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- Navbar -->
   <header class="navbar">
     <h1 class="logo">Vibe<span>Finder</span></h1>
+    <button class="hamburger" id="hamburgerBtn">☰</button>
+    <nav class="nav-links" id="navLinks">
+      <a href="index.html" class="active">Home</a>
+      <a href="about.html">About</a>
+      <a href="spots.html">Spots</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="contact.html">Contact</a>
+    </nav>
     <div class="navbar-right">
       <button id="bookingsBtn" class="fav-count-btn">📅 <span id="bookingCount">0</span></button>
       <button id="favCountBtn" class="fav-count-btn">❤️ <span id="favCount">0</span></button>
@@ -18,50 +25,54 @@
     </div>
   </header>
 
-  <!-- Hero Section -->
-  <section class="hero">
-        <h2><span id="typewriterHeading"></span><span class="cursor">|</span></h2>
-    <p>Select a vibe, search, and discover cafés & study spots that match your mood.</p>
-
-    <div class="search-bar">
-      <input type="text" id="searchInput" placeholder="Search by name...">
-    </div>
-
-    <div class="mood-filters" id="moodFilters">
-      <button class="mood-btn active" data-mood="all">All</button>
-      <button class="mood-btn" data-mood="chill">Chill</button>
-      <button class="mood-btn" data-mood="study">Study</button>
-      <button class="mood-btn" data-mood="aesthetic">Aesthetic</button>
-      <button class="mood-btn" data-mood="budget">Budget</button>
-    </div>
-
-      <div class="controls-row">
-      <div class="sort-row">
-        <label for="sortSelect">Sort by:</label>
-        <select id="sortSelect">
-          <option value="default">Default</option>
-          <option value="name">Name (A-Z)</option>
-          <option value="rating">Rating (High to Low)</option>
-          <option value="popular">Popular (Most Votes)</option>
-        </select>
-      </div>
-      <div class="controls-divider"></div>
+  <main>
+    <section class="hero">
+      <h2><span id="typewriterHeading"></span><span class="cursor">|</span></h2>
+      <p>Select a vibe, search, and discover cafés & study spots that match your mood — all across Lahore.</p>
+      <a href="spots.html" class="cta-btn">🔍 Explore Spots</a>
       <button id="surpriseBtn" class="surprise-btn">🎲 Surprise Me</button>
-    </div>
-  </section>
+    </section>
 
-  <!-- Spots Grid -->
-  <section class="spots-grid" id="spotsGrid">
-    <!-- JS se cards yahan inject honge -->
-  </section>
+    <section class="highlights">
+      <h2>Why VibeFinder?</h2>
+      <div class="highlight-grid">
+        <article class="highlight-card">
+          <span class="highlight-icon">🎯</span>
+          <h3>Mood-Based Discovery</h3>
+          <p>Filter spots by Chill, Study, Aesthetic, or Budget vibes — find exactly what fits your mood.</p>
+        </article>
+        <article class="highlight-card">
+          <span class="highlight-icon">⭐</span>
+          <h3>Real Ratings</h3>
+          <p>Rate spots yourself and see live community ratings before you go.</p>
+        </article>
+        <article class="highlight-card">
+          <span class="highlight-icon">📅</span>
+          <h3>Book a Visit</h3>
+          <p>Reserve your spot and time directly — no back and forth needed.</p>
+        </article>
+        <article class="highlight-card">
+          <span class="highlight-icon">❤️</span>
+          <h3>Save Favorites</h3>
+          <p>Keep track of your go-to spots, saved right in your browser.</p>
+        </article>
+      </div>
+    </section>
 
-  <!-- Modal -->
-  <div class="modal-overlay" id="modalOverlay">
-    <div class="modal">
-      <button class="modal-close" id="modalClose">&times;</button>
-      <div id="modalContent"></div>
-    </div>
-  </div>
+    <section class="testimonials">
+      <h2>What People Say</h2>
+      <div class="testimonial-slider" id="testimonialSlider"></div>
+    </section>
+
+    <section class="newsletter">
+      <h2>Stay Updated</h2>
+      <form id="newsletterForm">
+        <input type="email" id="emailInput" placeholder="Enter your email">
+        <button type="submit">Subscribe</button>
+        <p class="form-msg" id="formMsg"></p>
+      </form>
+    </section>
+  </main>
 
   <!-- Favorites Modal -->
   <div class="modal-overlay" id="favModalOverlay">
@@ -81,23 +92,6 @@
     </div>
   </div>
 
-  <!-- Testimonials -->
-  <section class="testimonials">
-    <h2>What People Say</h2>
-    <div class="testimonial-slider" id="testimonialSlider"></div>
-  </section>
-
-  <!-- Newsletter -->
-  <section class="newsletter">
-    <h2>Stay Updated</h2>
-    <form id="newsletterForm">
-      <input type="email" id="emailInput" placeholder="Enter your email">
-      <button type="submit">Subscribe</button>
-      <p class="form-msg" id="formMsg"></p>
-    </form>
-  </section>
-
-  <!-- Toast -->
   <div id="toast" class="toast"></div>
 
   <footer>

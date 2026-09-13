@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lahore Vibe Finder | Gallery</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="navbar">
+    <h1 class="logo">Vibe<span>Finder</span></h1>
+    <button class="hamburger" id="hamburgerBtn">☰</button>
+    <nav class="nav-links" id="navLinks">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="spots.html">Spots</a>
+      <a href="gallery.html" class="active">Gallery</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <div class="navbar-right">
+      <button id="bookingsBtn" class="fav-count-btn">📅 <span id="bookingCount">0</span></button>
+      <button id="favCountBtn" class="fav-count-btn">❤️ <span id="favCount">0</span></button>
+      <button id="themeToggle" class="theme-btn">🌙</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="page-header">
+      <h2>Gallery</h2>
+      <p>A peek into the vibes across Lahore. Click any photo to view it larger.</p>
+    </section>
+
+    <section class="gallery-grid" id="galleryGrid"></section>
+  </main>
+
+  <!-- Lightbox -->
+  <div class="modal-overlay" id="lightboxOverlay">
+    <div class="lightbox-box">
+      <button class="modal-close" id="lightboxClose">&times;</button>
+      <img id="lightboxImg" src="" alt="Spot photo">
+      <p id="lightboxCaption" class="lightbox-caption"></p>
+    </div>
+  </div>
+
+  <!-- Favorites Modal -->
+  <div class="modal-overlay" id="favModalOverlay">
+    <div class="modal">
+      <button class="modal-close" id="favModalClose">&times;</button>
+      <h2 style="margin-bottom:16px;">Your Favorites</h2>
+      <div id="favModalContent"></div>
+    </div>
+  </div>
+
+  <!-- Bookings Modal -->
+  <div class="modal-overlay" id="bookingsModalOverlay">
+    <div class="modal">
+      <button class="modal-close" id="bookingsModalClose">&times;</button>
+      <h2 style="margin-bottom:16px;">Your Bookings</h2>
+      <div id="bookingsModalContent"></div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <footer>
+    <p>&copy; 2026 Lahore Vibe Finder. Made by Nabiha.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

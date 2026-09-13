@@ -38,30 +38,49 @@ let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
 let ratingsData = JSON.parse(localStorage.getItem("ratingsData")) || {};
 let bookings = JSON.parse(localStorage.getItem("bookings")) || [];
 
-// ---------- DOM ----------
-const spotsGrid = document.getElementById("spotsGrid");
-const searchInput = document.getElementById("searchInput");
-const moodFilters = document.getElementById("moodFilters");
-const sortSelect = document.getElementById("sortSelect");
-const modalOverlay = document.getElementById("modalOverlay");
-const modalContent = document.getElementById("modalContent");
-const modalClose = document.getElementById("modalClose");
-const themeToggle = document.getElementById("themeToggle");
-const testimonialSlider = document.getElementById("testimonialSlider");
-const newsletterForm = document.getElementById("newsletterForm");
-const formMsg = document.getElementById("formMsg");
-const surpriseBtn = document.getElementById("surpriseBtn");
-const favCountBtn = document.getElementById("favCountBtn");
-const favCount = document.getElementById("favCount");
-const favModalOverlay = document.getElementById("favModalOverlay");
-const favModalContent = document.getElementById("favModalContent");
-const favModalClose = document.getElementById("favModalClose");
-const toast = document.getElementById("toast");
-const bookingsBtn = document.getElementById("bookingsBtn");
-const bookingCount = document.getElementById("bookingCount");
-const bookingsModalOverlay = document.getElementById("bookingsModalOverlay");
-const bookingsModalContent = document.getElementById("bookingsModalContent");
-const bookingsModalClose = document.getElementById("bookingsModalClose");
+// ---------- SAFE DOM GETTERS (return null if element not on this page) ----------
+const $ = (id) => document.getElementById(id);
+
+const spotsGrid = $("spotsGrid");
+const searchInput = $("searchInput");
+const moodFilters = $("moodFilters");
+const sortSelect = $("sortSelect");
+const modalOverlay = $("modalOverlay");
+const modalContent = $("modalContent");
+const modalClose = $("modalClose");
+const themeToggle = $("themeToggle");
+const testimonialSlider = $("testimonialSlider");
+const newsletterForm = $("newsletterForm");
+const formMsg = $("formMsg");
+const surpriseBtn = $("surpriseBtn");
+const favCountBtn = $("favCountBtn");
+const favCount = $("favCount");
+const favModalOverlay = $("favModalOverlay");
+const favModalContent = $("favModalContent");
+const favModalClose = $("favModalClose");
+const toast = $("toast");
+const bookingsBtn = $("bookingsBtn");
+const bookingCount = $("bookingCount");
+const bookingsModalOverlay = $("bookingsModalOverlay");
+const bookingsModalContent = $("bookingsModalContent");
+const bookingsModalClose = $("bookingsModalClose");
+const hamburgerBtn = $("hamburgerBtn");
+const navLinks = $("navLinks");
+const galleryGrid = $("galleryGrid");
+const lightboxOverlay = $("lightboxOverlay");
+const lightboxImg = $("lightboxImg");
+const lightboxCaption = $("lightboxCaption");
+const lightboxClose = $("lightboxClose");
+const contactForm = $("contactForm");
+const contactFormMsg = $("contactFormMsg");
+const typewriterEl = $("typewriterHeading");
+
+// ---------- HAMBURGER MENU (mobile nav) ----------
+if (hamburgerBtn && navLinks) {
+  hamburgerBtn.addEventListener("click", () => {
+    navLinks.classList.toggle("open");
+  });
+}
 
 // ---------- HELPER: image fallback ----------
 function attachImgFallback(container) {
@@ -76,6 +95,7 @@ function attachImgFallback(container) {
 // ---------- TOAST ----------
 let toastTimer;
 function showToast(message) {
+  if (!toast) return;
   clearTimeout(toastTimer);
   toast.textContent = message;
   toast.classList.add("show");
@@ -112,8 +132,10 @@ function renderStars(rating, interactive = false, spotId = null) {
   return html;
 }
 
-// ---------- RENDER SPOTS ----------
+// ---------- RENDER SPOTS (only runs if spotsGrid exists on this page) ----------
 function renderSpots() {
+  if (!spotsGrid) return;
+
   let filtered = spots.filter(spot => {
     const matchesMood = currentMood === "all" || spot.mood === currentMood;
     const matchesSearch = spot.name.toLowerCase().includes(searchTerm.toLowerCase());
@@ -179,10 +201,11 @@ function toggleFavorite(id) {
 }
 
 function updateFavCount() {
-  favCount.textContent = favorites.length;
+  if (favCount) favCount.textContent = favorites.length;
 }
 
 function renderFavModal() {
+  if (!favModalContent) return;
   const favSpots = spots.filter(s => favorites.includes(s.id));
   favModalContent.innerHTML = favSpots.length
     ? favSpots.map(s => `
@@ -198,18 +221,22 @@ function renderFavModal() {
   attachImgFallback(favModalContent);
 }
 
-favCountBtn.addEventListener("click", () => {
-  renderFavModal();
-  favModalOverlay.classList.add("active");
-});
-favModalClose.addEventListener("click", () => favModalOverlay.classList.remove("active"));
-favModalOverlay.addEventListener("click", (e) => {
-  if (e.target === favModalOverlay) favModalOverlay.classList.remove("active");
-});
+if (favCountBtn) {
+  favCountBtn.addEventListener("click", () => {
+    renderFavModal();
+    favModalOverlay.classList.add("active");
+  });
+}
+if (favModalClose) favModalClose.addEventListener("click", () => favModalOverlay.classList.remove("active"));
+if (favModalOverlay) {
+  favModalOverlay.addEventListener("click", (e) => {
+    if (e.target === favModalOverlay) favModalOverlay.classList.remove("active");
+  });
+}
 
 // ---------- BOOKINGS ----------
 function updateBookingCount() {
-  bookingCount.textContent = bookings.length;
+  if (bookingCount) bookingCount.textContent = bookings.length;
 }
 
 function addBooking(spotName, visitorName, date, time) {
@@ -228,6 +255,7 @@ function cancelBooking(id) {
 }
 
 function renderBookingsModal() {
+  if (!bookingsModalContent) return;
   bookingsModalContent.innerHTML = bookings.length
     ? bookings.map(b => `
         <div class="booking-mini-card">
@@ -243,17 +271,22 @@ function renderBookingsModal() {
   });
 }
 
-bookingsBtn.addEventListener("click", () => {
-  renderBookingsModal();
-  bookingsModalOverlay.classList.add("active");
-});
-bookingsModalClose.addEventListener("click", () => bookingsModalOverlay.classList.remove("active"));
-bookingsModalOverlay.addEventListener("click", (e) => {
-  if (e.target === bookingsModalOverlay) bookingsModalOverlay.classList.remove("active");
-});
+if (bookingsBtn) {
+  bookingsBtn.addEventListener("click", () => {
+    renderBookingsModal();
+    bookingsModalOverlay.classList.add("active");
+  });
+}
+if (bookingsModalClose) bookingsModalClose.addEventListener("click", () => bookingsModalOverlay.classList.remove("active"));
+if (bookingsModalOverlay) {
+  bookingsModalOverlay.addEventListener("click", (e) => {
+    if (e.target === bookingsModalOverlay) bookingsModalOverlay.classList.remove("active");
+  });
+}
 
-// ---------- MODAL ----------
+// ---------- SPOT DETAILS MODAL (only on spots.html) ----------
 function openModal(spot) {
+  if (!modalOverlay) return;
   const r = getRating(spot.id);
   const todayStr = new Date().toISOString().split("T")[0];
   modalContent.innerHTML = `
@@ -310,48 +343,73 @@ function openModal(spot) {
     modalOverlay.classList.remove("active");
   });
 }
-modalClose.addEventListener("click", () => modalOverlay.classList.remove("active"));
-modalOverlay.addEventListener("click", (e) => {
-  if (e.target === modalOverlay) modalOverlay.classList.remove("active");
-});
+if (modalClose) modalClose.addEventListener("click", () => modalOverlay.classList.remove("active"));
+if (modalOverlay) {
+  modalOverlay.addEventListener("click", (e) => {
+    if (e.target === modalOverlay) modalOverlay.classList.remove("active");
+  });
+}
 
 // ---------- FILTERS ----------
-moodFilters.addEventListener("click", (e) => {
-  if (!e.target.classList.contains("mood-btn")) return;
-  document.querySelectorAll(".mood-btn").forEach(b => b.classList.remove("active"));
-  e.target.classList.add("active");
-  currentMood = e.target.dataset.mood;
-  renderSpots();
-});
+if (moodFilters) {
+  moodFilters.addEventListener("click", (e) => {
+    if (!e.target.classList.contains("mood-btn")) return;
+    document.querySelectorAll(".mood-btn").forEach(b => b.classList.remove("active"));
+    e.target.classList.add("active");
+    currentMood = e.target.dataset.mood;
+    renderSpots();
+  });
+}
 
 // ---------- SORT ----------
-sortSelect.addEventListener("change", (e) => {
-  sortBy = e.target.value;
-  renderSpots();
-});
+if (sortSelect) {
+  sortSelect.addEventListener("change", (e) => {
+    sortBy = e.target.value;
+    renderSpots();
+  });
+}
 
 // ---------- SEARCH ----------
-searchInput.addEventListener("input", (e) => {
-  searchTerm = e.target.value;
-  renderSpots();
-});
+if (searchInput) {
+  searchInput.addEventListener("input", (e) => {
+    searchTerm = e.target.value;
+    renderSpots();
+  });
+}
 
 // ---------- SURPRISE ME ----------
-surpriseBtn.addEventListener("click", () => {
-  const random = spots[Math.floor(Math.random() * spots.length)];
-  openModal(random);
-  showToast(`How about "${random.name}"? 🎲`);
-});
+if (surpriseBtn) {
+  surpriseBtn.addEventListener("click", () => {
+    const random = spots[Math.floor(Math.random() * spots.length)];
+    if (modalOverlay) {
+      openModal(random);
+    } else {
+      // On Home page: redirect to spots page and show a toast first
+      showToast(`How about "${random.name}"? 🎲`);
+      setTimeout(() => { window.location.href = "spots.html"; }, 900);
+    }
+  });
+}
 
 // ---------- THEME TOGGLE ----------
-themeToggle.addEventListener("click", () => {
-  document.body.classList.toggle("dark");
-  themeToggle.textContent = document.body.classList.contains("dark") ? "☀️" : "🌙";
-});
+if (themeToggle) {
+  // Apply saved theme on load
+  if (localStorage.getItem("theme") === "dark") {
+    document.body.classList.add("dark");
+    themeToggle.textContent = "☀️";
+  }
+  themeToggle.addEventListener("click", () => {
+    document.body.classList.toggle("dark");
+    const isDark = document.body.classList.contains("dark");
+    themeToggle.textContent = isDark ? "☀️" : "🌙";
+    localStorage.setItem("theme", isDark ? "dark" : "light");
+  });
+}
 
 // ---------- TESTIMONIAL SLIDER ----------
 let testimonialIndex = 0;
 function renderTestimonial() {
+  if (!testimonialSlider) return;
   const t = testimonials[testimonialIndex];
   testimonialSlider.style.opacity = 0;
   setTimeout(() => {
@@ -360,38 +418,84 @@ function renderTestimonial() {
   }, 300);
   testimonialIndex = (testimonialIndex + 1) % testimonials.length;
 }
-setInterval(renderTestimonial, 4000);
+if (testimonialSlider) setInterval(renderTestimonial, 4000);
 
 // ---------- NEWSLETTER FORM ----------
-newsletterForm.addEventListener("submit", (e) => {
-  e.preventDefault();
-  const email = document.getElementById("emailInput").value.trim();
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(email)) {
-    formMsg.textContent = "Please enter a valid email address.";
-    formMsg.style.color = "#ffe0e0";
-  } else {
-    formMsg.textContent = "Subscribed successfully! 🎉";
-    formMsg.style.color = "#d4ffd4";
-    newsletterForm.reset();
-    showToast("Subscribed successfully! 🎉");
+if (newsletterForm) {
+  newsletterForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const email = document.getElementById("emailInput").value.trim();
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      formMsg.textContent = "Please enter a valid email address.";
+      formMsg.style.color = "#ffe0e0";
+    } else {
+      formMsg.textContent = "Subscribed successfully! 🎉";
+      formMsg.style.color = "#d4ffd4";
+      newsletterForm.reset();
+      showToast("Subscribed successfully! 🎉");
+    }
+  });
+}
+
+// ---------- CONTACT FORM (contact.html only) ----------
+if (contactForm) {
+  contactForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const name = document.getElementById("contactName").value.trim();
+    const email = document.getElementById("contactEmail").value.trim();
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!name || !emailRegex.test(email)) {
+      contactFormMsg.textContent = "Please enter a valid name and email.";
+      contactFormMsg.style.color = "#c0392b";
+      return;
+    }
+
+    contactFormMsg.textContent = `Thanks ${name}, your message has been sent! We'll reply soon.`;
+    contactFormMsg.style.color = "#1e8449";
+    contactForm.reset();
+    showToast("Message sent successfully! 📩");
+  });
+}
+
+// ---------- GALLERY + LIGHTBOX (gallery.html only) ----------
+if (galleryGrid) {
+  spots.forEach(spot => {
+    const item = document.createElement("div");
+    item.className = "gallery-item";
+    item.innerHTML = `<img src="${spot.img}" alt="${spot.name}">`;
+    item.addEventListener("click", () => {
+      lightboxImg.src = spot.img;
+      lightboxCaption.textContent = `${spot.name} — ${spot.mood}`;
+      lightboxOverlay.classList.add("active");
+    });
+    galleryGrid.appendChild(item);
+  });
+  attachImgFallback(galleryGrid);
+}
+if (lightboxClose) lightboxClose.addEventListener("click", () => lightboxOverlay.classList.remove("active"));
+if (lightboxOverlay) {
+  lightboxOverlay.addEventListener("click", (e) => {
+    if (e.target === lightboxOverlay) lightboxOverlay.classList.remove("active");
+  });
+}
+
+// ---------- TYPEWRITER EFFECT (index.html only) ----------
+if (typewriterEl) {
+  const typewriterText = "Find Your Perfect Spot in Lahore";
+  let twIndex = 0;
+  function typeWriter() {
+    if (twIndex < typewriterText.length) {
+      typewriterEl.textContent += typewriterText.charAt(twIndex);
+      twIndex++;
+      setTimeout(typeWriter, 60);
+    }
   }
-});
+  typeWriter();
+}
 
 // ---------- INIT ----------
 renderSpots();
 renderTestimonial();
 updateBookingCount();
-// ---------- TYPEWRITER EFFECT ----------
-const typewriterEl = document.getElementById("typewriterHeading");
-const typewriterText = "Find Your Perfect Spot in Lahore";
-let twIndex = 0;
-
-function typeWriter() {
-  if (twIndex < typewriterText.length) {
-    typewriterEl.textContent += typewriterText.charAt(twIndex);
-    twIndex++;
-    setTimeout(typeWriter, 60);
-  }
-}
-typeWriter();

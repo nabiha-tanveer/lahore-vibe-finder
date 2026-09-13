@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lahore Vibe Finder | Spots</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="navbar">
+    <h1 class="logo">Vibe<span>Finder</span></h1>
+    <button class="hamburger" id="hamburgerBtn">☰</button>
+    <nav class="nav-links" id="navLinks">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="spots.html" class="active">Spots</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <div class="navbar-right">
+      <button id="bookingsBtn" class="fav-count-btn">📅 <span id="bookingCount">0</span></button>
+      <button id="favCountBtn" class="fav-count-btn">❤️ <span id="favCount">0</span></button>
+      <button id="themeToggle" class="theme-btn">🌙</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="page-header">
+      <h2>Find Your Perfect Spot</h2>
+      <p>Browse, filter, and book cafés & study spots across Lahore.</p>
+
+      <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Search by name...">
+      </div>
+
+      <div class="mood-filters" id="moodFilters">
+        <button class="mood-btn active" data-mood="all">All</button>
+        <button class="mood-btn" data-mood="chill">Chill</button>
+        <button class="mood-btn" data-mood="study">Study</button>
+        <button class="mood-btn" data-mood="aesthetic">Aesthetic</button>
+        <button class="mood-btn" data-mood="budget">Budget</button>
+      </div>
+
+      <div class="controls-row">
+        <div class="sort-row">
+          <label for="sortSelect">Sort by:</label>
+          <select id="sortSelect">
+            <option value="default">Default</option>
+            <option value="name">Name (A-Z)</option>
+            <option value="rating">Rating (High to Low)</option>
+            <option value="popular">Popular (Most Votes)</option>
+          </select>
+        </div>
+        <div class="controls-divider"></div>
+        <button id="surpriseBtn" class="surprise-btn">🎲 Surprise Me</button>
+      </div>
+    </section>
+
+    <section class="spots-grid" id="spotsGrid"></section>
+  </main>
+
+  <!-- Spot Details Modal -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+      <button class="modal-close" id="modalClose">&times;</button>
+      <div id="modalContent"></div>
+    </div>
+  </div>
+
+  <!-- Favorites Modal -->
+  <div class="modal-overlay" id="favModalOverlay">
+    <div class="modal">
+      <button class="modal-close" id="favModalClose">&times;</button>
+      <h2 style="margin-bottom:16px;">Your Favorites</h2>
+      <div id="favModalContent"></div>
+    </div>
+  </div>
+
+  <!-- Bookings Modal -->
+  <div class="modal-overlay" id="bookingsModalOverlay">
+    <div class="modal">
+      <button class="modal-close" id="bookingsModalClose">&times;</button>
+      <h2 style="margin-bottom:16px;">Your Bookings</h2>
+      <div id="bookingsModalContent"></div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <footer>
+    <p>&copy; 2026 Lahore Vibe Finder. Made by Nabiha.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

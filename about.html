@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lahore Vibe Finder | About</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="navbar">
+    <h1 class="logo">Vibe<span>Finder</span></h1>
+    <button class="hamburger" id="hamburgerBtn">☰</button>
+    <nav class="nav-links" id="navLinks">
+      <a href="index.html">Home</a>
+      <a href="about.html" class="active">About</a>
+      <a href="spots.html">Spots</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <div class="navbar-right">
+      <button id="bookingsBtn" class="fav-count-btn">📅 <span id="bookingCount">0</span></button>
+      <button id="favCountBtn" class="fav-count-btn">❤️ <span id="favCount">0</span></button>
+      <button id="themeToggle" class="theme-btn">🌙</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="page-header about-header">
+      <h2>About VibeFinder</h2>
+      <p>Why we built this, and who it's for.</p>
+    </section>
+
+    <section class="about-content">
+      <blockquote class="pull-quote">
+        "Finding the right spot shouldn't take longer than actually enjoying it."
+      </blockquote>
+
+      <article class="about-block">
+        <h3>Our Story</h3>
+        <p>Lahore is full of hidden cafés, quiet study corners, and rooftop hangouts — but finding the right one for your mood was always a matter of luck or word-of-mouth. VibeFinder was built to change that: a simple, mood-first way to discover spots across the city that actually match what you're looking for, whether it's a quiet place to study before an exam or a chill café to unwind with friends.</p>
+      </article>
+
+      <article class="about-block">
+        <h3>Our Mission</h3>
+        <p>To help students and locals in Lahore find spots that fit their vibe, budget, and schedule — without endless scrolling through generic review sites. Every spot on VibeFinder is tagged by mood, rated by real visitors, and bookable in a few clicks.</p>
+      </article>
+
+      <div class="about-grid">
+        <article class="highlight-card">
+          <span class="highlight-icon">🎓</span>
+          <h3>Built for Students</h3>
+          <p>Designed with PUCIT and other Lahore students in mind — budget-friendly options and quiet study spots are front and center.</p>
+        </article>
+        <article class="highlight-card">
+          <span class="highlight-icon">🏙️</span>
+          <h3>Local Focus</h3>
+          <p>Every spot listed is based in Lahore — from DHA to Gulberg to roadside chai stalls near campus.</p>
+        </article>
+        <article class="highlight-card">
+          <span class="highlight-icon">🛠️</span>
+          <h3>Built With</h3>
+          <p>A fully static site — HTML, CSS, and vanilla JavaScript. No backend, no frameworks, no database.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <!-- Favorites Modal -->
+  <div class="modal-overlay" id="favModalOverlay">
+    <div class="modal">
+      <button class="modal-close" id="favModalClose">&times;</button>
+      <h2 style="margin-bottom:16px;">Your Favorites</h2>
+      <div id="favModalContent"></div>
+    </div>
+  </div>
+
+  <!-- Bookings Modal -->
+  <div class="modal-overlay" id="bookingsModalOverlay">
+    <div class="modal">
+      <button class="modal-close" id="bookingsModalClose">&times;</button>
+      <h2 style="margin-bottom:16px;">Your Bookings</h2>
+      <div id="bookingsModalContent"></div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <footer>
+    <p>&copy; 2026 Lahore Vibe Finder. Made by Nabiha.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
