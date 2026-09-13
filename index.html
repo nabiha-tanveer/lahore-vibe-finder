@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lahore Vibe Finder</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Navbar -->
+  <header class="navbar">
+    <h1 class="logo">Vibe<span>Finder</span></h1>
+    <button id="themeToggle" class="theme-btn">🌙</button>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <h2>Find Your Perfect Spot in Lahore</h2>
+    <p>Select a vibe, search, and discover cafés & study spots that match your mood.</p>
+
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="Search by name...">
+    </div>
+
+    <div class="mood-filters" id="moodFilters">
+      <button class="mood-btn active" data-mood="all">All</button>
+      <button class="mood-btn" data-mood="chill">Chill</button>
+      <button class="mood-btn" data-mood="study">Study</button>
+      <button class="mood-btn" data-mood="aesthetic">Aesthetic</button>
+      <button class="mood-btn" data-mood="budget">Budget</button>
+    </div>
+  </section>
+
+  <!-- Spots Grid -->
+  <section class="spots-grid" id="spotsGrid">
+    <!-- JS se cards yahan inject honge -->
+  </section>
+
+  <!-- Modal -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+      <button class="modal-close" id="modalClose">&times;</button>
+      <div id="modalContent"></div>
+    </div>
+  </div>
+
+  <!-- Testimonials -->
+  <section class="testimonials">
+    <h2>What People Say</h2>
+    <div class="testimonial-slider" id="testimonialSlider"></div>
+  </section>
+
+  <!-- Newsletter -->
+  <section class="newsletter">
+    <h2>Stay Updated</h2>
+    <form id="newsletterForm">
+      <input type="email" id="emailInput" placeholder="Enter your email">
+      <button type="submit">Subscribe</button>
+      <p class="form-msg" id="formMsg"></p>
+    </form>
+  </section>
+
+  <footer>
+    <p>&copy; 2026 Lahore Vibe Finder. Made by Nabiha.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
