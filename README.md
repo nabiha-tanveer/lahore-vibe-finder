@@ -3,6 +3,7 @@
 A fully static, mood-based web app to discover cafés and study spots across Lahore — pick a vibe, search, sort, rate, favorite, and even book a visit. Built entirely with **HTML, CSS, and vanilla JavaScript** — no backend, no frameworks, no database.
 
 ![Made with HTML CSS JS](https://img.shields.io/badge/Made%20with-HTML%20%7C%20CSS%20%7C%20JS-orange)
+🔗 **Live Demo:** [https://lahore-vibe-finder.vercel.app/](https://lahore-vibe-finder.vercel.app/)
 
 ---
 
